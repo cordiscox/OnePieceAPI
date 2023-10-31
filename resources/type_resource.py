@@ -3,6 +3,7 @@ from flask_restful import Resource
 from models.type import Type
 from app import db
 from sqlalchemy.exc import IntegrityError 
+from flask_jwt_extended import jwt_required
 
 class TypeListResource(Resource):
     def get(self):
@@ -12,6 +13,7 @@ class TypeListResource(Resource):
             output.append({'id': type.id_type, 'type': type.type, 'description': type.description})
         return jsonify({'Types': output})
     
+    @jwt_required()
     def post(self):
         data = request.get_json()
         types = Type.query.all()
@@ -32,7 +34,8 @@ class TypeResource(Resource):
             return jsonify({'Type': type})
         else:
             return jsonify({'Message': 'fail'})
-        
+    
+    @jwt_required()    
     def put(self, id_type):
         data = request.get_json()
         type = Type.query.get(id_type)
@@ -43,7 +46,8 @@ class TypeResource(Resource):
             return jsonify({'message': 'Updated'})
         else:
             return jsonify({'message': 'Error.'})
-        
+    
+    @jwt_required()    
     def delete(self, id_type):
         type = Type.query.get(id_type)
         if type:

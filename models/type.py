@@ -2,7 +2,7 @@ from app import db
 from datetime import datetime
 
 class Type(db.Model):
-    __tablename__ = 'type'
+    __tablename__ = 'types'
     id_type = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.String(80), unique=True, nullable=False)
     description = db.Column(db.String(2000), unique=True, nullable=False)

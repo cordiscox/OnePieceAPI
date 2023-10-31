@@ -1,0 +1,10 @@
+** Security things
+* Implement roles, use get_jwt_identity() to get the user and check if they can use the endpoint.
+* Implement hash in password.
+* HTTPS, Cookies, Refreshing Tokens, JWT Revoking / Blocklist
+
+
+* Implement Loggin: 
+    Log all resquests with time, resource, user and status
+    Log warnings and exeptions.
+
