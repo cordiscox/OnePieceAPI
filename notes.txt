@@ -8,3 +8,14 @@
     Log all resquests with time, resource, user and status
     Log warnings and exeptions.
 
+* Implement pytest
+* Making test for importats resources
+
+* Create requeriments.txt
+
+* Implement flask-migrate
+
+
+**ISSUES
+* Solve problems with relationship beetwhen Type and Devil_Fruit
+

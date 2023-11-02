@@ -22,9 +22,9 @@ class TypeListResource(Resource):
             print(new_type.type, new_type.description)
             db.session.add(new_type)
             db.session.commit()
-            return jsonify({'message': 'Tipo creado exitosamente'})
+            return jsonify({'Message': 'Type created successfully'})
         else:
-            return jsonify({'error': 'El tipo ya existe'})
+            return jsonify({'Error': 'Type already exists'})
 
 class TypeResource(Resource):
     def get(self, id_type):
@@ -33,7 +33,7 @@ class TypeResource(Resource):
             type = {'id': type.id_type, 'type': type.type, 'description': type.description}
             return jsonify({'Type': type})
         else:
-            return jsonify({'Message': 'fail'})
+            return jsonify({'Error': 'Type not found'})
     
     @jwt_required()    
     def put(self, id_type):
@@ -43,9 +43,9 @@ class TypeResource(Resource):
             type.type = data.get('type', type.type)
             type.description = data.get('description', type.description)
             db.session.commit()
-            return jsonify({'message': 'Updated'})
+            return jsonify({'Message': 'Updated'})
         else:
-            return jsonify({'message': 'Error.'})
+            return jsonify({'Error': 'Type not found.'})
     
     @jwt_required()    
     def delete(self, id_type):
@@ -57,6 +57,6 @@ class TypeResource(Resource):
             except IntegrityError as e:
                 db.session.rollback()
                 raise e
-        return jsonify({'message': 'Type deleted successfully'})
+        return jsonify({'Message': 'Type deleted successfully'})
         #else:
         #    return jsonify({'message': 'Type not found'})

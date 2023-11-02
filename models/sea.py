@@ -1,4 +1,4 @@
-from app import db
+from config import db
 
 class Sea(db.Model):
     __tablename__ = 'seas'

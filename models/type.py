@@ -1,5 +1,7 @@
-from app import db
+from config import db
 from datetime import datetime
+from models.devil_fruit import Devil_Fruit
+
 
 class Type(db.Model):
     __tablename__ = 'types'
@@ -9,8 +11,9 @@ class Type(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    devil_fruit = db.relationship('Devil_Fruit', back_populates='type')
     
+    #devil_fruit = db.relationship('Devil_Fruit', back_populates='types')
+
     #def __init__(self, type, description, created_at, updated_at):
     #    self.name = name
     #    self.email = email

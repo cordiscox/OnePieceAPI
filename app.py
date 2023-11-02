@@ -8,7 +8,7 @@ from flask_jwt_extended import JWTManager
 
 from resources.type_resource import TypeListResource, TypeResource
 from resources.user_resource import LoginResource
-
+from resources.sea_resource import SeaListResource, SeaResource
 
 def create_app():
     app = Flask(__name__)
@@ -20,6 +20,10 @@ def create_app():
 
     api.add_resource(TypeListResource, '/types')
     api.add_resource(TypeResource, '/types/<int:id_type>')
+
+    api.add_resource(SeaListResource, '/seas')
+    api.add_resource(SeaResource, '/seas/<int:id_sea>')
+
     api.add_resource(LoginResource, '/login')
 
 

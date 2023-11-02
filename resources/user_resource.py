@@ -15,7 +15,7 @@ class LoginResource(Resource):
         password = data['password']
 
         # Verify user credentials in the database
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(username=username).one_or_none()
 
         if user and user.password == password:
             access_token = create_access_token(identity=user.id_user)
