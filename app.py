@@ -40,10 +40,12 @@ def create_app():
         else:
             return jsonify({"errors": messages}), err.code
     try:
+        
         with app.app_context():
+            from models import crew, sea, type, user, devil_fruit, enums,marine, pirate
             db.create_all()
     except Exception as e:
-        print(e)
+        logger.exception(e)
         
     return app
 

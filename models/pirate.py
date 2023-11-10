@@ -8,9 +8,9 @@ from models.sea import Sea
 class Pirate(db.Model):
     __tablename__ = 'pirates'
     id_pirate = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    id_crew = db.Column(db.Integer, db.ForeignKey('crew.id_crew'))
-    id_sea = db.Column(db.Integer, db.ForeignKey('sea.id_sea'))
-    id_devil_fruit = db.Column(db.Integer, db.ForeignKey('devil_fruit.id_devil_fruit'))
+    id_crew = db.Column(db.Integer, db.ForeignKey('crews.id_crew'))
+    id_sea = db.Column(db.Integer, db.ForeignKey('seas.id_sea'))
+    id_devil_fruit = db.Column(db.Integer, db.ForeignKey('devil_fruits.id_devil_fruit'))
     bountly = db.Column(db.Integer)
     name = db.Column(db.String(255), unique=True, nullable=False)
     image = db.Column(db.String(255))

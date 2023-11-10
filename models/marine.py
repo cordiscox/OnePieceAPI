@@ -6,7 +6,7 @@ from models.devil_fruit import Devil_Fruit
 class Marine(db.Model):
     __tablename__ = 'marines'
     id_marine = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    id_devil_fruit = db.Column(db.Integer, db.ForeignKey('devil_fruit.id_devil_fruit'))
+    id_devil_fruit = db.Column(db.Integer, db.ForeignKey('devil_fruits.id_devil_fruit'))
     name = db.Column(db.String(255), unique=True, nullable=False)
     '''rank = db.Column(db.Enum(
         'Fleet Admiral', 'Admiral', 'Vice Admiral', 'Rear Admiral', 'Commodore',
