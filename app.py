@@ -2,6 +2,7 @@ from config import db, Config, Preprodconfig
 from dotenv import load_dotenv
 from flask import Flask, jsonify
 from flask_restful import Api
+from flask_migrate import Migrate
 from logger import logger
 
 from flask_jwt_extended import get_jwt_identity
@@ -20,6 +21,7 @@ def create_app():
     db.init_app(app)
     api = Api(app)
     jwt = JWTManager(app)
+    migrate = Migrate(app, db)
 
     api.add_resource(TypeListResource, '/types')
     api.add_resource(TypeResource, '/types/<int:id_type>')
