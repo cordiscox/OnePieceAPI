@@ -10,4 +10,6 @@ class Devil_Fruit(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    #type = db.relationship('Type', back_populates='devil_fruits', uselist=False)
+    type = db.relationship('Type', back_populates='devil_fruit')  # Cambiado a 'devil_fruit'
+    pirate = db.relationship('Pirate', back_populates='devil_fruit')
+    marine = db.relationship('Marine', back_populates='devil_fruit')

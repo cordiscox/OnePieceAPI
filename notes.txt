@@ -1,4 +1,5 @@
 ** Security things
+* Implement Logout and register
 * Implement roles, use get_jwt_identity() to get the user and check if they can use the endpoint.
 * Implement hash in password.
 * HTTPS, Cookies, Refreshing Tokens, JWT Revoking / Blocklist
@@ -9,9 +10,9 @@
     Log warnings and exeptions.
 
 * Implement pytest
-* Making test for importats resources
+* Making test for important resources
 
-* Create requeriments.txt
+* Create requeriments.txt -- DONE
 
 * Implement flask-migrate
 
