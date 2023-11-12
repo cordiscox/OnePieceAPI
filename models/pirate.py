@@ -1,9 +1,6 @@
 import models.enums as enums
 from config import db
 from datetime import datetime
-from models.devil_fruit import Devil_Fruit
-from models.crew import Crew
-from models.sea import Sea
 
 class Pirate(db.Model):
     __tablename__ = 'pirates'
@@ -20,4 +17,4 @@ class Pirate(db.Model):
 
     crew = db.relationship('Crew', backref='pirates')
     sea = db.relationship('Sea', backref='pirates')
-    devil_fruit = db.relationship('DevilFruit', backref='devil_fruit')
+    devil_fruit = db.relationship('Devil_Fruit', backref='pirates')
