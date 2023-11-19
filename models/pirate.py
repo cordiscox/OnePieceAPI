@@ -1,6 +1,7 @@
 import models.enums as enums
 from config import db
 from datetime import datetime
+from models.crew import Crew
 
 class Pirate(db.Model):
     __tablename__ = 'pirates'

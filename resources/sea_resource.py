@@ -1,9 +1,15 @@
-from flask import jsonify, request
+from app import logger
+from config import db
+from flask import jsonify, abort
 from flask_restful import Resource
-from models.sea import Sea
-from app import db
-from sqlalchemy.exc import IntegrityError 
 from flask_jwt_extended import jwt_required
+from models.sea import Sea
+from webargs import fields
+from webargs.flaskparser import use_args
+
+sea_args = {
+    'name': fields.Str(required=True)
+}
 
 class SeaListResource(Resource):
     def get(self):
@@ -14,12 +20,13 @@ class SeaListResource(Resource):
         return jsonify({'Seas': output})
     
     @jwt_required()
-    def post(self):
-        data = request.get_json()
-        seas = Sea.query.all()
-        if data['name'] not in [sea.name for sea in seas]:
-            new_sea = Sea(name=data['name'])
-            #print(new_sea.name)
+    @use_args(sea_args)
+    def post(self, args):
+        name = args['name']
+
+        exist_sea = Sea.query.filter_by(name=name).first()
+        if not exist_sea:
+            new_sea = Sea(name=name)
             db.session.add(new_sea)
             db.session.commit()
             return jsonify({'message': 'Sea created successfully'})
@@ -33,18 +40,23 @@ class SeaResource(Resource):
             sea = {'id': sea.id_sea, 'name': sea.name}
             return jsonify({'Sea': sea})
         else:
-            return jsonify({'Error': 'Sea not found'})
+            return jsonify({'error': 'Sea not found'})
     
-    @jwt_required()    
-    def put(self, id_sea):
-        data = request.get_json()
+    @jwt_required()
+    @use_args(sea_args)    
+    def put(self, args, id_sea):
+        name = args['name']
         sea = Sea.query.get(id_sea)
-        if sea:
-            sea.name = data.get('name', sea.name)
+
+        if not sea:
+            abort(404, description='Sea not found')
+        
+        if name:
+            sea.name = name
             db.session.commit()
             return jsonify({'message': 'Updated successfully'})
         else:
-            return jsonify({'message': 'Sea not found.'})
+            abort(404, description='Cannot be empty')
         
     @jwt_required()    
     def delete(self, id_sea):
@@ -53,8 +65,14 @@ class SeaResource(Resource):
             try:
                 db.session.delete(sea)
                 db.session.commit()
-            except IntegrityError as e:
+                return jsonify({'Message': 'Sea deleted successfully'})
+            except Exception as e:
                 db.session.rollback()
-                raise e
-        return jsonify({'message': 'Sea deleted successfully'})
-       
+                logger.error("ROLLBACK DONE")
+                logger.exception(e)
+                from datetime import datetime
+                abort(404, description=[f'Exception error you can check log at {datetime.utcnow()}', f'exception: {e}'])
+        else:
+            abort(404, description="Sea not found")
+     
+    

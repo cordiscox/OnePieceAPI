@@ -1,12 +1,10 @@
 from config import db
-from flask import jsonify
-from flask import make_response
-from flask_restful import Resource, reqparse
+from flask import jsonify, abort
+from flask_restful import Resource
 from flask_jwt_extended import create_access_token
 from models.user import User
-
 from webargs import fields
-from webargs.flaskparser import use_args, use_kwargs, parser, abort
+from webargs.flaskparser import use_args
 
 user_args = {
     'username': fields.Str(required=True),
@@ -26,8 +24,8 @@ class LoginResource(Resource):
             access_token = create_access_token(identity=user.id_user)
             return jsonify({'access_token': access_token})
         else:
-            response = {'message': 'Invalid credentials'}
-            return make_response(response, 400)
+            abort(404, "Invalid credentials")
+            
 
 class RegisterResource(Resource):
     @use_args(user_args)
@@ -37,8 +35,7 @@ class RegisterResource(Resource):
 
         # Check if the user already exists
         if User.query.filter_by(username=username).first():
-            response = {'message': 'Username already taken'}
-            return make_response(response, 400)
+            abort(404, "Username already taken")
         
         # Create a new user
         user = User(username=username, password=password)

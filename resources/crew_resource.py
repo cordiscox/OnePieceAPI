@@ -1,9 +1,16 @@
-from flask import jsonify, request
+from app import logger
+from config import db
+from flask import jsonify, abort
 from flask_restful import Resource
-from models.crew import Crew
-from app import db
-from sqlalchemy.exc import IntegrityError 
 from flask_jwt_extended import jwt_required
+from models.crew import Crew
+from webargs import fields
+from webargs.flaskparser import use_args
+
+
+crew_args = {
+    'name': fields.Str(required=True)
+}
 
 class CrewListResource(Resource):
     def get(self):
@@ -14,17 +21,18 @@ class CrewListResource(Resource):
         return jsonify({'Crews': output})
     
     @jwt_required()
-    def post(self):
-        data = request.get_json()
-        crews = Crew.query.all()
-        if data['name'] not in [crew.name for crew in crews]:
-            new_crew = Crew(name=data['name'])
-            #print(new_crew.name)
+    @use_args(crew_args)
+    def post(self, args):
+        name = args['name']
+
+        exist_crews = Crew.query.filter_by(name=name).first()
+        if not exist_crews:
+            new_crew = Crew(name=name)
             db.session.add(new_crew)
             db.session.commit()
             return jsonify({'message': 'Crew created successfully'})
         else:
-            return jsonify({'error': 'Crew already exists'})
+            abort(404, description='Crew already exists')
 
 class CrewResource(Resource):
     def get(self, id_crew):
@@ -33,18 +41,23 @@ class CrewResource(Resource):
             crew = {'id': crew.id_crew, 'name': crew.name}
             return jsonify({'Crew': crew})
         else:
-            return jsonify({'Error': 'Crew not found'})
+            abort(404, description='Crew not found')
     
-    @jwt_required()    
-    def put(self, id_crew):
-        data = request.get_json()
+    @jwt_required() 
+    @use_args(crew_args)   
+    def put(self, args, id_crew):
+        name = args['name']
         crew = Crew.query.get(id_crew)
-        if crew:
-            crew.name = data.get('crew', crew.name)
+
+        if not crew:
+            abort(404, description='Crew not found')
+        
+        if name:
+            crew.name = name
             db.session.commit()
             return jsonify({'message': 'Updated successfully'})
         else:
-            return jsonify({'message': 'Crew not found.'})
+            abort(404, description='Cannot be empty')
         
     @jwt_required()    
     def delete(self, id_crew):
@@ -53,8 +66,14 @@ class CrewResource(Resource):
             try:
                 db.session.delete(crew)
                 db.session.commit()
-            except IntegrityError as e:
+                return jsonify({'Message': 'Crew deleted successfully'})
+            except Exception as e:
                 db.session.rollback()
-                raise e
-        return jsonify({'message': 'Crew deleted successfully'})
+                logger.error("ROLLBACK DONE")
+                logger.exception(e)
+                from datetime import datetime
+                abort(404, description=[f'Exception error you can check log at {datetime.utcnow()}', f'exception: {e}'])
+        else:
+            abort(404, description="Crew not found")
+    
        
