@@ -9,20 +9,22 @@ from logger import logger
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import JWTManager
 
+
 from resources.type_resource import TypeListResource, TypeResource
 from resources.user_resource import LoginResource, RegisterResource
 from resources.sea_resource import SeaListResource, SeaResource
 from resources.crew_resource import CrewListResource, CrewResource
 from resources.devil_fruit_resource import DevilFruitListResource, DevilFruitResource
-from resources.pirate_resource import PirateListResource
+from resources.pirate_resource import PirateListResource, PirateResource
+from resources.marine_resource import MarineListResource, MarineResource
 
 def create_app():
     logger.debug("Initilization of APP")
 
     app = Flask(__name__)
     load_dotenv()
-    app.config.from_object(Config)
-    #app.config.from_object(Preprodconfig)
+    #app.config.from_object(Config)
+    app.config.from_object(Preprodconfig)
     db.init_app(app)
     api = Api(app)
     jwt = JWTManager(app)
@@ -44,7 +46,10 @@ def create_app():
     api.add_resource(DevilFruitResource, '/devil_fruits/<int:id_devil_fruit>')
 
     api.add_resource(PirateListResource, '/pirates')
-    #api.add_resource(PirateResource, '/devil_fruit/<int:id_devil_fruit>')
+    api.add_resource(PirateResource, '/pirates/<int:id_pirate>')
+
+    api.add_resource(MarineListResource, '/marines')
+    api.add_resource(MarineResource, '/marines/<int:id_marine>')
 
     
     @app.errorhandler(422)
@@ -56,7 +61,7 @@ def create_app():
             return jsonify({"errors": messages}), err.code, headers
         else:
             return jsonify({"errors": messages}), err.code
-    
+
     #Logica para crear las tablas y los datos --> chequear de cambiarlo a una capa de datos.
     if os.environ['FIRST_EXECUTION']:
         logger.info("First execution of the application, change config to False")
@@ -68,7 +73,8 @@ def create_app():
                 logger.info("Creating all tables")
                 db.create_all()
                 logger.info("Creating all data on the tables")
-                #LLENAR TODAS LAS TABLAS
+                #import test
+                #test.create_sample_data()
             except Exception as e:
                 logger.exception(e)
         

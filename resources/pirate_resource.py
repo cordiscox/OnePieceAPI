@@ -9,8 +9,9 @@ from models.sea import Sea
 from models.devil_fruit import Devil_Fruit
 from webargs import fields
 from webargs.flaskparser import use_args
-from sqlalchemy.sql import text
 from models.enums import Statuses
+
+status = Statuses.Statuses()
 
 pirate_args = {
     'id_crew': fields.Int(required=True),
@@ -30,9 +31,9 @@ class PirateListResource(Resource):
         for pirate in pirates:
             output.append({
                 'id_pirate': pirate.id_pirate, 
-                'id_crew': pirate.id_crew, 
-                'id_sea': pirate.id_sea, 
-                'id_devil_fruit': pirate.id_devil_fruit,
+                'crew': pirate.crew.name, 
+                'sea': pirate.sea.name, 
+                'devil_fruit': pirate.devil_fruit.name,
                 'bountly': pirate.bountly,
                 'name': pirate.name,
                 'image': pirate.image,
@@ -40,7 +41,7 @@ class PirateListResource(Resource):
                 })
         return jsonify({'Pirates': output})
 
-    #@jwt_required()
+    @jwt_required()
     @use_args(pirate_args)
     def post(self, args):
         id_crew = args['id_crew'], 
@@ -64,6 +65,9 @@ class PirateListResource(Resource):
         if not check_devil_fruit:            
             abort(404, description=f'Devil Fruit with {id_devil_fruit} not exists')
 
+        if status.value not in Statuses.Statuses():
+            abort(404, description='status not in enumeration')
+
         #Insert
         exist_pirate = Pirate.query.filter_by(name=name).first()
         if not exist_pirate:
@@ -73,7 +77,7 @@ class PirateListResource(Resource):
                                 bountly=bountly,
                                 name=name,
                                 image=image,
-                                status=status)
+                                status=status.value)
             db.session.add(new_pirate)
             db.session.commit()
             return jsonify({'message': f'Pirate {new_pirate.name} created successfully'})
@@ -81,39 +85,84 @@ class PirateListResource(Resource):
             abort(404, description=f'Pirate {new_pirate.name} already exists')
 
         
-"""
+
 class PirateResource(Resource):
-    def get(self, pirate_id):
-        pirate = Pirate.query.get(pirate_id)
+    def get(self, id_pirate):
+        pirate = Pirate.query.get(id_pirate)
         if pirate:
-            return {'id': pirate.id_pirate, 'name': pirate.name, 'bountly': pirate.bountly, 'status': pirate.status}
+            pirate = {
+                'id_pirate': pirate.id_pirate, 
+                'crew': pirate.crew.name, 
+                'sea': pirate.sea.name, 
+                'devil_fruit': pirate.devil_fruit.name,
+                'bountly': pirate.bountly,
+                'name': pirate.name,
+                'image': pirate.image,
+                'status': pirate.status 
+            }
+            return jsonify({'Pirate': pirate})
         else:
-            return {'message': 'Pirata no encontrado'}, 404
+            return {'message': 'Pirate not exists'}, 404
         
 
     @jwt_required()
     @use_args(pirate_args)
-    def put(self, pirate_id):
-        args = parser.parse_args()
-        pirate = Pirate.query.get(pirate_id)
-        if pirate:
-            pirate.name = args['name']
-            pirate.bountly = args['bountly']
-            # Actualiza más atributos según las columnas de tu modelo
+    def put(self, args, id_pirate):
+        id_crew = args['id_crew'], 
+        id_sea = args['id_sea'], 
+        id_devil_fruit = args['id_devil_fruit'],
+        bountly = args['bountly'],
+        name = args['name'],
+        image = args['image'],
+        status = args['status']
+
+        pirate = Pirate.query.get(id_pirate)
+        if not pirate:
+            abort(404, description='Pirate not found')
+
+        crew = Crew.query.get(id_crew)
+        if not crew:
+            abort(404, description='Crew not found')
+
+        sea = Sea.query.get(id_sea)
+        if not sea:
+            abort(404, description='Sea not found')
+        
+        devil_fruit = Devil_Fruit.query.get(id_devil_fruit)
+        if not devil_fruit:
+            abort(404, description='Devil Fruit not found')
+            
+        if status.value not in Statuses.Statuses():
+            abort(404, description='status not in enumeration')
+                  
+        if bountly and name and image:
+            pirate.id_crew = id_crew,
+            pirate.id_sea = id_sea, 
+            pirate.id_devil_fruit = id_devil_fruit,
+            pirate.bountly = bountly,
+            pirate.name = name,
+            pirate.image = image,
+            pirate.status = status.value
             db.session.commit()
-            return {'message': 'Pirata actualizado exitosamente', 'name': pirate.name}
+            return jsonify({'message': 'Pirate updated successfully'})
         else:
-            return {'message': 'Pirata no encontrado'}, 404
+            abort(404, description='Args cannot be empty')
 
 
     @jwt_required()
     @use_args(pirate_args)
-    def delete(self, pirate_id):
-        pirate = Pirate.query.get(pirate_id)
+    def delete(self, id_pirate):
+        pirate = Pirate.query.get(id_pirate)
         if pirate:
-            db.session.delete(pirate)
-            db.session.commit()
-            return {'message': 'Pirata eliminado exitosamente'}
+            try:
+                db.session.delete(pirate)
+                db.session.commit()
+                return jsonify({'Message': 'Pirate deleted successfully'})
+            except Exception as e:
+                db.session.rollback()
+                logger.error("ROLLBACK DONE")
+                logger.exception(e)
+                from datetime import datetime
+                abort(404, description=[f'Exception error you can check log at {datetime.utcnow()}', f'exception: {e}'])
         else:
-            return {'message': 'Pirata no encontrado'}, 404
-"""
+            abort(404, description="Pirate not found")

@@ -20,7 +20,10 @@ class DevilFruitListResource(Resource):
         devil_fruits = Devil_Fruit.query.all()
         output = []
         for devil_fruit in devil_fruits:
-            output.append({'id': devil_fruit.id_devil_fruit, 'id_type': devil_fruit.id_type, 'name': devil_fruit.name, 'description': devil_fruit.description})
+            output.append({'id': devil_fruit.id_devil_fruit, 
+                           'type': devil_fruit.type.type, 
+                           'name': devil_fruit.name, 
+                           'description': devil_fruit.description})
         return jsonify({'Devil_Fruits': output})
     
    # @jwt_required()
@@ -47,12 +50,12 @@ class DevilFruitListResource(Resource):
 
 class DevilFruitResource(Resource):
     def get(self, id_devil_fruit):
-        devil_fruit = db.session.execute(text(f"SELECT * FROM get_devil_fruit({id_devil_fruit})")).fetchone()
+        devil_fruit = Devil_Fruit.query.get(id_devil_fruit)
         if devil_fruit:
             devil_fruit = {
-                'type': devil_fruit[0], 
-                'name': devil_fruit[1],
-                'description': devil_fruit[2]
+                'type': devil_fruit.type.type, 
+                'name': devil_fruit.name,
+                'description': devil_fruit.description
             }
             return jsonify({'Devil_Fruit': devil_fruit})
         else:
