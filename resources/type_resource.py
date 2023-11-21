@@ -1,21 +1,29 @@
 from app import logger
 from config import db
-from flask import jsonify, abort
+from flask import jsonify, abort, request
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required
 from models import enums
 from models.type import Type
 from webargs import fields
-from webargs.flaskparser import use_args
+from webargs.flaskparser import use_args, use_kwargs
 
 
 type_args = {
     'type': fields.Str(required=True),
-    'description': fields.Str(required=True)
+    'description': fields.Str(required=True),
+}
+
+limit_args = {
+    'limit': fields.Int()
 }
 
 class TypeListResource(Resource):
-    def get(self):
+    #@use_kwargs(limit_args,location="query")
+    @use_kwargs({"limit": fields.Int()})
+    def get(self, args):
+        print(args)
+        #print(request.args)
         types = Type.query.all()
         output = []
         for type in types:

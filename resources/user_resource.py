@@ -5,6 +5,9 @@ from flask_jwt_extended import create_access_token
 from models.user import User
 from webargs import fields
 from webargs.flaskparser import use_args
+from flasgger import swag_from
+
+
 
 user_args = {
     'username': fields.Str(required=True),
@@ -13,6 +16,7 @@ user_args = {
 
 class LoginResource(Resource):
     @use_args(user_args)
+    @swag_from('../swagger/user_login.yml')
     def post(self, args):
         username = args['username']
         password = args['password']
@@ -29,10 +33,12 @@ class LoginResource(Resource):
 
 class RegisterResource(Resource):
     @use_args(user_args)
+    @swag_from('../swagger/user_register.yml')
     def post(self, args):
         username = args['username']
         password = args['password']
-
+        print(username)
+        print(password)
         # Check if the user already exists
         if User.query.filter_by(username=username).first():
             abort(404, "Username already taken")

@@ -4,7 +4,10 @@ from dotenv import load_dotenv, set_key
 from flask import Flask, jsonify
 from flask_restful import Api
 from flask_migrate import Migrate
+from flasgger import Swagger
+from flasgger.utils import load_from_file
 from logger import logger
+
 
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import JWTManager
@@ -29,6 +32,9 @@ def create_app():
     api = Api(app)
     jwt = JWTManager(app)
     migrate = Migrate(app, db)
+    swagger = Swagger(app)
+
+    logger.debug(app.config)
 
     api.add_resource(LoginResource, '/login')
     api.add_resource(RegisterResource, '/register')
@@ -63,6 +69,7 @@ def create_app():
             return jsonify({"errors": messages}), err.code
 
     #Logica para crear las tablas y los datos --> chequear de cambiarlo a una capa de datos.
+    #Logic to create all tables and set the data.
     if os.environ['FIRST_EXECUTION']:
         logger.info("First execution of the application, change config to False")
         os.environ['FIRST_EXECUTION'] = ''

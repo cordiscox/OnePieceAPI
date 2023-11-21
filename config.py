@@ -8,6 +8,14 @@ class Config:
     SQLALCHEMY_DATABASE_URI = f"postgresql://{os.environ['DB_USER']}:{os.environ['DB_PASSWORD']}@{os.environ['DB_HOST']}/{os.environ['DB_NAME']}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JWT_SECRET_KEY = secrets.token_hex()
+    SWAGGER = {"swagger": "2.0",
+    "info": {
+        "description": "Welcome to One Piece API Documentation ",
+        "termsOfService": "/tos",
+        "title": "One Piece API",
+        "version": "1.0.1"
+        }
+    }
 
     #JWT CONFIG
     #app.config["JWT_COOKIE_SECURE"] = False
@@ -19,6 +27,13 @@ class Preprodconfig:
     SECRET_KEY = secrets.token_hex()
     SQLALCHEMY_DATABASE_URI = f"postgresql://{os.environ['PRE_DB_USER']}:{os.environ['PRE_DB_PASSWORD']}@{os.environ['PRE_DB_HOST']}/{os.environ['PRE_DB_NAME']}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-
+    SWAGGER = {"swagger": "2.0",
+    "info": {
+        "description": "Welcome to One Piece API Documentation ",
+        "termsOfService": "/tos",
+        "title": "One Piece API",
+        "version": "1.0.1"
+        }
+    }
 
 db = SQLAlchemy()
