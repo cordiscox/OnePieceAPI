@@ -3,6 +3,7 @@ from config import db
 from flask import jsonify, abort
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required
+from flasgger import swag_from
 from models.marine import Marine
 from models.crew import Crew
 from models.sea import Sea
@@ -23,6 +24,7 @@ marine_args = {
 
 
 class MarineListResource(Resource):
+    @swag_from('../swagger/marine/get.yml')
     def get(self):
         marines = Marine.query.all()
         output = []
@@ -39,6 +41,7 @@ class MarineListResource(Resource):
 
     @jwt_required()
     @use_args(marine_args)
+    @swag_from('../swagger/marine/post.yml')
     def post(self, args):
         id_devil_fruit = args['id_devil_fruit']
         name = args['name']
@@ -100,14 +103,14 @@ class MarineResource(Resource):
 
         marine = Marine.query.get(id_marine)
         if not marine:
-            abort(404, description='Marine not found')
+            abort(404, description='Marine doesn''t found')
         
         devil_fruit = Devil_Fruit.query.get(id_devil_fruit)
         if not devil_fruit:
-            abort(404, description='Devil Fruit not found')
+            abort(404, description='Devil Fruit doesn''t found')
             
         if status.value not in Statuses.Statuses():
-            abort(404, description='status not in enumeration')
+            abort(404, description='Status not in enumeration')
 
         if rank.value not in Marine_positions.Marine_positions():
             abort(404, description='Marine positions not in enumeration')  
@@ -125,6 +128,7 @@ class MarineResource(Resource):
 
 
     @jwt_required()
+    @swag_from('../swagger/marine/delete.yml')
     def delete(self, id_marine):
         marine = Marine.query.get(id_marine)
         if marine:

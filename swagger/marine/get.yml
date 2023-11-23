@@ -1,0 +1,53 @@
+Get all Marines
+---
+tags:
+  - MARINE
+responses:
+  201:
+    description: Return all Marines
+    schema:
+      type: object
+      properties:
+        id_marine:
+          type: integer
+        devil_fruit:
+          type: string
+        name:
+          type: string
+        rank:
+          type: string
+          enum:
+            - Fleet Admiral 
+            - Admiral 
+            - Vice Admiral
+            - Rear Admiral
+            - Commodore
+            - Captain                 
+            - Commander 
+            - Lieutenant Commander 
+            - Lieutenant 
+            - Lieutenant Junior Grade
+            - Ensign
+            - Warrant Officer 
+            - Master Chief Petty Officer 
+            - Chief Petty Officer
+            - Petty Officer
+            - Seaman First Class 
+            - Seaman Apprentice 
+            - Seaman Recruit
+            - Chore Boy 
+            - Inspector General 
+            - Instructor
+            - Undetermined
+        devil_fruit:
+          type: string
+        image:
+          type: string
+        status:
+          type: string
+          enum:
+            - Alive
+            - Dead
+            - Undetermined
+  500:
+    description: 'Server Error'

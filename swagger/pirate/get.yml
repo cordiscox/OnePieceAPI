@@ -1,0 +1,32 @@
+Get all Pirate
+---
+tags:
+  - PIRATE
+responses:
+  201:
+    description: Return all Pirate
+    schema:
+      type: object
+      properties:
+        id_pirate:
+          type: integer
+        name:
+          type: integer
+        crew:
+          type: string
+        sea:
+          type: string
+        devil_fruit:
+          type: string
+        bountly:
+          type: integer
+        image:
+          type: string
+        status:
+          type: string
+          enum:
+            - Alive
+            - Dead
+            - Undetermined
+  500:
+    description: 'Server Error'

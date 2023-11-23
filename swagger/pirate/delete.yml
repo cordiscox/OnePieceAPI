@@ -1,0 +1,24 @@
+Delete pirate.
+
+---
+tags:
+  - PIRATE
+security:
+  - Bearer: []
+parameters:
+  - name: id_pirate
+    in: path
+    type: integer
+    required: true
+responses:
+  200:
+    description: Pirate deleted successfully
+  404:
+    description: Error
+    schema:
+      properties:
+        message:
+          type: string
+          enum:
+            - Pirate not found
+            - Exception error check log for details

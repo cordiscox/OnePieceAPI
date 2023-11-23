@@ -26,7 +26,7 @@ class LoginResource(Resource):
 
         if user and user.password == password:
             access_token = create_access_token(identity=user.id_user)
-            return jsonify({'access_token': access_token})
+            return jsonify({'access_token': f'Baerer {access_token}'})
         else:
             abort(404, "Invalid credentials")
             
@@ -51,5 +51,5 @@ class RegisterResource(Resource):
         # Generate and return an access token
         access_token = create_access_token(identity=user.id_user)
         return jsonify({'message': f'User: {user.username}, created correctly',
-                        'access_token': access_token})
+                        'access_token': f'Baerer {access_token}'})
 

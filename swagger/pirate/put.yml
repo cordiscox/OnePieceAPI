@@ -1,0 +1,39 @@
+Update Pirate
+
+---
+tags:
+  - PIRATE
+security:
+  - Bearer: []
+parameters:
+  - name: Authorization
+    in: header
+    type: string
+    required: true
+  - name: id_pirate
+    in: path
+    type: integer
+    required: true
+  - name: body
+    in: body
+    required: true
+    schema:
+      id_crew: integer
+      id_sea: integer
+      id_devil_fruit: integer
+      bountly: number
+      name: string
+      image: string
+      status: string
+responses:
+  200:
+    description: Pirate updated successfully
+  404:
+    description:
+      enum:
+        - Pirate doesn't found
+        - Crew doesn't found
+        - Sea doesn't found
+        - Devil Fruit doesn't found
+        - Status not in enumeration
+        - Args cannot be empty

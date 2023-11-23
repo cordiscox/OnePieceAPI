@@ -1,0 +1,22 @@
+
+Get.
+
+---
+tags:
+  - Type
+responses:
+  500:
+    description: Server Error
+  200:
+    description: Get all items
+    schema:
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+        description:
+          type: string
+
+
+
