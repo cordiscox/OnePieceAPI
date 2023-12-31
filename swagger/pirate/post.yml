@@ -1,0 +1,49 @@
+Create a Pirate
+
+---
+tags:
+  - PIRATE
+security:
+  - Bearer: []
+parameters:
+  - name: Pirate
+    in: body
+    required: true
+    description: Create a Pirate
+    schema:
+      properties:
+        id_crew:
+          type: integer
+        id_sea:
+          type: integer
+        id_devil_fruit:
+          type: integer
+        bountly:
+          type: integer
+        name:
+          type: string
+        image:
+          type: string
+        status:
+          type: string
+          enum:
+            - Alive
+            - Dead
+            - Undetermined
+    content:
+      application/json:
+responses:
+  200:
+    description: Pirate created successfully
+  404:
+    description: ERROR
+    schema:
+      properties:
+        message:
+          type: string
+          enum:
+            - Devil Fruit doesn't exist
+            - Sea doesn't exist
+            - Crew doesn't exist
+            - Status not in enumeration
+            - Pirate already exist

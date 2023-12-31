@@ -1,0 +1,28 @@
+Authenticate the user.
+
+---
+tags:
+  - USERS
+parameters:
+  - name: Login
+    in: body
+    required: true
+    description: Login user
+    schema:
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    content:
+      application/json:
+responses:
+  200:
+    description: 'Successful login'
+    schema:
+      type: 'object'
+      properties:
+        access_token:
+          type: 'string'
+  404:
+    description: 'Invalid credentials'
