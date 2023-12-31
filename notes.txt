@@ -1,9 +1,10 @@
 ** Security things
-* Implement Logout and register
 * Implement roles, use get_jwt_identity() to get the user and check if they can use the endpoint.
 * Implement hash in password.
 * HTTPS, Cookies, Refreshing Tokens, JWT Revoking / Blocklist
 
+** Implement query in get request. investigate another options.
+check type_resource.py
 
 * Implement Loggin: 
     Log all resquests with time, resource, user and status
@@ -12,11 +13,5 @@
 * Implement pytest
 * Making test for important resources
 
-* Create requeriments.txt -- DONE
 
-* Implement flask-migrate
-
-
-**ISSUES
-* Solve problems with relationship beetwhen Type and Devil_Fruit
 

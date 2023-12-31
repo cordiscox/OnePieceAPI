@@ -1,0 +1,24 @@
+Delete marine.
+
+---
+tags:
+  - MARINE
+security:
+  - Bearer: []
+parameters:
+  - name: id_marine
+    in: path
+    type: integer
+    required: true
+responses:
+  200:
+    description: Marine deleted successfully
+  404:
+    description: Error
+    schema:
+      properties:
+        message:
+          type: string
+          enum:
+            - Marine not found
+            - Exception error check log for details

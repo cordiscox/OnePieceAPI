@@ -1,0 +1,74 @@
+Create a Marine
+
+---
+tags:
+  - MARINE
+security:
+  - Bearer: []
+parameters:
+  - name: Marine
+    in: body
+    required: true
+    description: Insert a Marine
+    schema:
+      properties:
+        type:
+          devil_fruit: string
+          enum:
+            - Zoan
+            - Zoan Ancient
+            - Zoan Mythical
+            - Paramecia
+            - Logia
+            - Undetermined
+        name:
+          type: string
+        rank:
+          type: string
+          enum:
+            - Fleet Admiral 
+            - Admiral 
+            - Vice Admiral
+            - Rear Admiral
+            - Commodore
+            - Captain                 
+            - Commander 
+            - Lieutenant Commander 
+            - Lieutenant 
+            - Lieutenant Junior Grade
+            - Ensign
+            - Warrant Officer 
+            - Master Chief Petty Officer 
+            - Chief Petty Officer
+            - Petty Officer
+            - Seaman First Class 
+            - Seaman Apprentice 
+            - Seaman Recruit
+            - Chore Boy 
+            - Inspector General 
+            - Instructor
+            - Undetermined
+        image:
+          type: string
+        status:
+          type: string
+          enum:
+            - Alive
+            - Dead
+            - Undetermined
+    content:
+      application/json:
+responses:
+  200:
+    description: Marine created successfully
+  404:
+    description: ERROR
+    schema:
+      properties:
+        message:
+          type: string
+          enum:
+            - Devil Fruit not exists
+            - status not in enumeration
+            - Marine positions not in enumeration
+            - Marine already exists

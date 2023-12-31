@@ -1,0 +1,56 @@
+Update Marine
+
+---
+tags:
+  - MARINE
+security:
+  - Bearer: []
+parameters:
+  - name: id_marine
+    in: path
+    type: integer
+    required: true
+  - name: body
+    in: body
+    required: true
+    schema:
+      id_devil_fruit: integer
+      name: string
+      rank: string
+        enum:
+          - Fleet Admiral 
+          - Admiral 
+          - Vice Admiral
+          - Rear Admiral
+          - Commodore
+          - Captain                 
+          - Commander 
+          - Lieutenant Commander 
+          - Lieutenant 
+          - Lieutenant Junior Grade
+          - Ensign
+          - Warrant Officer 
+          - Master Chief Petty Officer 
+          - Chief Petty Officer
+          - Petty Officer
+          - Seaman First Class 
+          - Seaman Apprentice 
+          - Seaman Recruit
+          - Chore Boy 
+          - Inspector General 
+          - Instructor
+          - Undetermined
+      image: string
+      status: string
+responses:
+  200:
+    description: Pirate updated successfully
+  404:
+    description:
+      enum:
+        - Pirate doesn't found
+        - Crew doesn't found
+        - Sea doesn't found
+        - Devil Fruit doesn't found
+        - Status not in enumeration
+        - Args cannot be empty

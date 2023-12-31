@@ -3,6 +3,7 @@ from config import db
 from flask import jsonify, abort
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required
+from flasgger import swag_from
 from models.pirate import Pirate
 from models.crew import Crew
 from models.sea import Sea
@@ -25,6 +26,7 @@ pirate_args = {
 
 
 class PirateListResource(Resource):
+    @swag_from('../swagger/pirate/get.yml')
     def get(self):
         pirates = Pirate.query.all()
         output = []
@@ -43,6 +45,7 @@ class PirateListResource(Resource):
 
     @jwt_required()
     @use_args(pirate_args)
+    @swag_from('../swagger/pirate/post.yml')
     def post(self, args):
         id_crew = args['id_crew'], 
         id_sea = args['id_sea'], 
@@ -107,6 +110,7 @@ class PirateResource(Resource):
 
     @jwt_required()
     @use_args(pirate_args)
+    @swag_from('../swagger/pirate/put.yml')
     def put(self, args, id_pirate):
         id_crew = args['id_crew'], 
         id_sea = args['id_sea'], 
@@ -118,19 +122,19 @@ class PirateResource(Resource):
 
         pirate = Pirate.query.get(id_pirate)
         if not pirate:
-            abort(404, description='Pirate not found')
+            abort(404, description='Pirate doesn''t found')
 
         crew = Crew.query.get(id_crew)
         if not crew:
-            abort(404, description='Crew not found')
+            abort(404, description='Crew doesn''t found')
 
         sea = Sea.query.get(id_sea)
         if not sea:
-            abort(404, description='Sea not found')
+            abort(404, description='Sea doesn''t found')
         
         devil_fruit = Devil_Fruit.query.get(id_devil_fruit)
         if not devil_fruit:
-            abort(404, description='Devil Fruit not found')
+            abort(404, description='Devil Fruit doesn''t found')
             
         if status.value not in Statuses.Statuses():
             abort(404, description='status not in enumeration')
@@ -151,6 +155,7 @@ class PirateResource(Resource):
 
     @jwt_required()
     @use_args(pirate_args)
+    @swag_from('../swagger/pirate/delete.yml')
     def delete(self, id_pirate):
         pirate = Pirate.query.get(id_pirate)
         if pirate:

@@ -1,0 +1,42 @@
+Create a Type
+
+---
+tags:
+  - Type
+security:
+  - JWT: []
+parameters:
+  - name: type
+    in: body
+    required: true
+    description: Name of the type and the description
+    schema:
+      properties:
+        type:
+          type: string
+          enum:
+            - Zoan
+            - Zoan Ancient
+            - Zoan Mythical
+            - Paramecia
+            - Logia
+            - Undetermined
+        description:
+          type: string
+    content:
+      application/json:
+  - name: Authorization
+    in: header
+    type: string
+    format: Bearer <JWT>
+    description: Access token obtained after authentication.
+responses:
+  200:
+    description: 'Successful login'
+    schema:
+      type: 'object'
+      properties:
+        access_token:
+          type: 'string'
+  404:
+    description: 'Invalid credentials'
